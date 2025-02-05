@@ -75,17 +75,16 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/admin/product-sales', [ProductSalesController::class, 'index'])->name('product.sales');
 
 
-
-    //approved transactions
-    Route::get('approved_transactions', [ApprovedTransactionController::class, 'index'])->name('approved_transactions.index');
-    Route::post('approved_transactions/{id}', [ApprovedTransactionController::class, 'approve'])->name('approved_transactions.approve');
-    Route::delete('approved_transactions/{id}', [ApprovedTransactionController::class, 'destroy'])->name('approved_transactions.destroy');
-    Route::get('approved_transactions/{id}', [ApprovedTransactionController::class, 'show'])->name('approved_transactions.show');
-
     //transaksi
     Route::get('transaksi', [AdminTransaksiController::class, 'index'])->name('admin.transaksi.index');
     Route::get('transaksi/{userId}/detail', [AdminTransaksiController::class, 'showDetail'])->name('admin.transaksi.detail');
     Route::delete('transaksi/{transaction}', [AdminTransaksiController::class, 'destroy'])->name('admin.transaksi.destroy');
+    Route::get('transaksi/{transaction}', [AdminTransaksiController::class, 'show'])->name('admin.transaksi.show');
+    Route::get('transaksi/{transactionId}/invoice', [AdminTransaksiController::class, 'generateInvoice'])->name('admin.transaksi.generateInvoice');
+
+
+
+
 
 
 
@@ -111,6 +110,9 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('transactions/checkout/{transactionId}', [TransactionController::class, 'checkout'])->name('transactions.checkout');
     Route::post('transactions/update-status', [TransactionController::class, 'updateStatus'])->name('transactions.update-status');
+    Route::get('transactions/{transactionId}/invoice', [TransactionController::class, 'generateInvoice'])->name('transactions.generateInvoice');
+
+
 
 
 });

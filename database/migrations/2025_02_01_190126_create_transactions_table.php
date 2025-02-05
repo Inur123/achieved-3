@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone_number');
             $table->enum('status', ['pending', 'paid', 'approved', 'failed'])->default('pending');
-            $table->string('snap_token')->nullable();  // Tambahkan status 'failed'
+            $table->string('snap_token')->nullable();
+            $table->decimal('price', 10, 2);  // Tambahkan status 'failed'
             $table->timestamps();
         });
 

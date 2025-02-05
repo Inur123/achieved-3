@@ -71,7 +71,6 @@
                                         <th>Nama Produk</th>
                                         <th>Tanggal Transaksi</th>
                                         <th>Status Pembayaran</th>
-                                        <th>Bukti Pembayaran</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -85,19 +84,28 @@
                                             <td>{{ $transaction->phone_number }}</td>
                                             <td>{{ $transaction->product->name }}</td>
                                             <td>{{ $transaction->created_at->translatedFormat('l, d F Y | H.i.s') }}</td>
-
-                                            <td>{{ $transaction->status }}</td>
-                                            <td><img src="{{ asset('storage/' . $transaction->payment_proof) }}"
-                                                    alt="Payment Proof" width="100"></td>
                                             <td>
-                                                <form action="{{ route('admin.transaksi.destroy', $transaction->id) }}"
-                                                    method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm"
-                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">Hapus</button>
-                                                </form>
+                                                @if ($transaction->status == 'pending')
+                                                    <span class="badge bg-warning">Pending</span>
+                                                @elseif ($transaction->status == 'paid')
+                                                    <span class="badge bg-success">Paid</span>
+                                                @else
+                                                    <span class="badge bg-info">Approve</span>
+                                                @endif
                                             </td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <form action="{{ route('admin.transaksi.destroy', $transaction->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">Hapus</button>
+                                                    </form>
+
+                                                    <a href="{{ route('admin.transaksi.show', $transaction->id) }}" class="btn btn-outline-info btn-sm">Detail</a>
+                                                </div>
+                                            </td>
+
+
                                         </tr>
                                     @endforeach
                                 </tbody>

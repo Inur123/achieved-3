@@ -40,8 +40,7 @@
                             <th>Harga</th>
                             <th>Tanggal Transaksi</th>
                             <th>Status</th>
-                            <th>Bayar</th>
-
+                            <th>Bayar / Invoice</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,24 +57,21 @@
                                     @if ($transaction->status == 'pending')
                                         <span class="badge bg-warning">Pending</span>
                                     @elseif ($transaction->status == 'paid')
-                                        <span class="badge bg-success">Paid</span>
+                                        <span class="badge bg-info">Paid</span>
                                     @else
-                                        <span class="badge bg-info">Approve</span>
+                                        <span class="badge bg-success">Approve</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if ($transaction->status == 'pending')
                                         <!-- Tombol Bayar hanya muncul jika status pending -->
-                                        <a href="{{ route('transactions.checkout', ['transactionId' => $transaction->id]) }}" class="btn btn-primary btn-sm">Bayar</a>
+                                        <a href="{{ route('transactions.checkout', ['transactionId' => $transaction->id]) }}" class="btn btn-danger btn-sm">Bayar</a>
                                     @elseif ($transaction->status == 'paid' || $transaction->status == 'approved')
-                                        <!-- Status transaksi sudah dibayar -->
-                                        <span class="badge bg-success">Sudah Dibayar</span>
+                                        <!-- Jika status approved, tampilkan tombol untuk download invoice -->
+                                        <a href="{{ route('transactions.generateInvoice', ['transactionId' => $transaction->id]) }}" class="btn btn-info btn-sm">Download</a>
+
                                     @endif
                                 </td>
-
-
-
-
                             </tr>
                         @endforeach
                     </tbody>

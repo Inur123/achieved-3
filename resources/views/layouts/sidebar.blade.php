@@ -90,16 +90,6 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Request::is('admin/approved-transactions') ? 'active' : '' }}">
-                        <a class="sidebar-link {{ request()->routeIs('approved_transactions.*') ? 'active' : '' }}"
-                            href="{{ route('approved_transactions.index') }}" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-credit-card"></i> <!-- Icon for Approved Transaction -->
-                            </span>
-                            <span class="hide-menu">Approved Transaksi</span>
-                        </a>
-                    </li>
-
                     <li class="sidebar-item {{ Request::is('admin/transaksi*') ? 'active' : '' }}">
                         <a class="sidebar-link {{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}"
                             href="{{ route('admin.transaksi.index') }}" aria-expanded="false">

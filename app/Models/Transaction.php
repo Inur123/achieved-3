@@ -11,7 +11,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'name', 'email', 'phone_number', 'status','snap_token','order_id'
+        'user_id', 'product_id', 'name', 'email', 'phone_number', 'status','snap_token','order_id','price'
     ];
 
     public function product()
@@ -25,14 +25,7 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function approvedTransaction()
-    {
-        return $this->hasOne(ApprovedTransaction::class);
-    }
 
-    public function productTransactions()
-    {
-        return $this->hasMany(ProductTransaction::class);
-    }
+
 
 }

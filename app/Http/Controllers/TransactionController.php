@@ -36,7 +36,7 @@ class TransactionController extends Controller
             'email' => 'required|email|max:255',
             'phone_number' => 'required|string|max:15',
         ]);
-
+        $product = Product::findOrFail($validated['product_id']);
         // Buat transaksi baru dengan status 'pending'
         $transaction = Transaction::create([
             'user_id' => auth()->id(),
@@ -47,6 +47,7 @@ class TransactionController extends Controller
             'email' => $validated['email'],
             'phone_number' => $validated['phone_number'],
             'status' => 'pending',
+            'price' => $product->price,
         ]);
 
         // Konfigurasi Midtrans
@@ -77,21 +78,6 @@ class TransactionController extends Controller
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
             return redirect()->route('transactions.index')->with('error', 'Terjadi kesalahan saat memproses pembayaran.');
-        }
-
-        // Tambah atau perbarui quantity di tabel product_transaction
-        $productTransaction = ProductTransaction::where('product_id', $validated['product_id'])
-            ->latest()
-            ->first();
-
-        if ($productTransaction) {
-            $productTransaction->increment('quantity');
-        } else {
-            ProductTransaction::create([
-                'product_id' => $validated['product_id'],
-                'transaction_id' => $transaction->id,
-                'quantity' => 1,
-            ]);
         }
 
         // Redirect ke halaman checkout setelah transaksi berhasil dibuat
@@ -156,4 +142,20 @@ class TransactionController extends Controller
         // Return success response
         return response()->json(['status' => 'success', 'message' => 'Transaction status updated'], 200);
     }
+
+    public function generateInvoice($transactionId)
+    {
+        // Ambil transaksi berdasarkan ID
+        $transaction = Transaction::with('product')->findOrFail($transactionId);
+
+        // Buat instance dari PDF terlebih dahulu
+        $pdf = app('dompdf.wrapper'); // This will get the instance of the PDF class
+
+        // Load view untuk PDF
+        $pdf->loadView('user.transactions.invoice', compact('transaction'));
+
+        // Return PDF untuk di-stream (open in browser, allow print/download)
+        return $pdf->stream('invoice-' . $transaction->order_id . '.pdf');
+    }
+
 }

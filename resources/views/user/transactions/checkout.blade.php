@@ -22,6 +22,7 @@
     <form action="{{ route('transactions.checkout', $transaction->id) }}" method="GET">
         @csrf
         <button type="button" id="pay-button" class="btn btn-primary">Bayar Sekarang</button>
+        <a href="{{ route('transactions.index') }}" class="btn btn-secondary">Bayar Nanti</a>
     </form>
 </div>
 

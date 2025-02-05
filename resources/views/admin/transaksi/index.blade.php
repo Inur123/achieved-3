@@ -65,7 +65,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Pengguna</th>
+                                        <th>Nama</th>
                                         <th>Email</th>
                                         <th>Total Transaksi</th>
                                         <th>Aksi</th>

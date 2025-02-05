@@ -22,7 +22,7 @@ class AdminDashboardController extends Controller
         $totalAuthors = Author::count();
         $totalTags = Tag::count();
         $totalProducts = Product::count();
-        $totalPurchasedProducts = Product::has('transactions')->count();
+        // $totalPurchasedProducts = Product::has('transactions')->count();
 
         // Get the total transactions
         $totalTransactions = Transaction::count();
@@ -41,7 +41,7 @@ class AdminDashboardController extends Controller
             'totalAuthors',
             'totalTags',
             'totalProducts',
-            'totalPurchasedProducts',
+
             'totalTransactions',
             'totalPayments'
 
