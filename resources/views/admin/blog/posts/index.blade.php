@@ -98,10 +98,10 @@
                             <td>
                                 <a href="{{ route('blog.posts.edit', $post->id) }}" class="btn btn-outline-warning btn-sm">Edit</a>
 
-                                <form action="{{ route('blog.posts.destroy', $post->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('blog.posts.destroy', $post->id) }}" method="POST" class="d-inline" id="delete-form-{{ $post->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ $post->id }})">Delete</button>
                                 </form>
                             </td>
                         </tr>

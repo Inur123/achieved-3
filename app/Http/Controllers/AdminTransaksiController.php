@@ -36,11 +36,15 @@ class AdminTransaksiController extends Controller
 
     public function destroy(Transaction $transaction)
     {
+        // Get the user_id from the transaction
+        $userId = $transaction->user_id;
+
         // Menghapus transaksi
         $transaction->delete();
 
-        // Mengarahkan kembali dengan pesan sukses
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
+        // Mengarahkan kembali ke URL yang dituju setelah transaksi dihapus
+        return redirect("/admin/transaksi/{$userId}/detail")
+            ->with('success', 'Transaksi berhasil dihapus.');
     }
 
     // TransactionController.php

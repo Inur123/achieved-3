@@ -12,6 +12,38 @@
 
 @section('content')
 <div class="container-fluid">
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonColor: '#d33'
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#d33'
+            });
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#3085d6'
+            });
+        </script>
+    @endif
     <h2>Checkout</h2>
     <p><strong>Produk:</strong> {{ $transaction->product->name }}</p>
     <p><strong>Harga:</strong> Rp {{ number_format($transaction->product->price, 0, ',', '.') }}</p>
@@ -46,24 +78,51 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        alert("Pembayaran sukses!");
-                        window.location.href = "{{ route('transactions.index') }}";
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pembayaran sukses!',
+                            text: "Pembayaran Anda telah berhasil diproses.",
+                            confirmButtonColor: '#3085d6'
+                        }).then(() => {
+                            window.location.href = "{{ route('transactions.index') }}";
+                        });
                     } else {
-                        alert("Terjadi kesalahan saat memperbarui status transaksi.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi kesalahan',
+                            text: "Terjadi kesalahan saat memperbarui status transaksi.",
+                            confirmButtonColor: '#d33'
+                        });
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert("Pembayaran gagal!");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Pembayaran gagal!',
+                        text: "Terjadi masalah saat memproses pembayaran.",
+                        confirmButtonColor: '#d33'
+                    });
                 });
             },
             onPending: function(result) {
-                alert("Menunggu pembayaran...");
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Menunggu pembayaran...',
+                    text: "Pembayaran Anda sedang diproses.",
+                    confirmButtonColor: '#f39c12'
+                });
             },
             onError: function(result) {
-                alert("Pembayaran gagal!");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pembayaran gagal!',
+                    text: "Terjadi masalah saat memproses pembayaran.",
+                    confirmButtonColor: '#d33'
+                });
             }
         });
     };
 </script>
+
 @endsection

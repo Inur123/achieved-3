@@ -1,6 +1,12 @@
-<!-- resources/views/admin/transaksi/invoice.blade.php -->
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Invoice</title>
+    <link rel="shortcut icon" type="image/png" href="{{ asset('template/assets/images/logos/logo-2.png') }}" />
     <style>
         body {
             font-family: Arial, sans-serif;

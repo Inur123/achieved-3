@@ -63,10 +63,10 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-primary">Edit</a>
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" id="delete-form-{{ $product->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="confirmDelete({{ $product->id }})">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -76,4 +76,5 @@
             </div>
         </div>
     </div>
+
 @endsection

@@ -75,10 +75,10 @@
                                 <td>{{ $tag->slug }}</td>
                                 <td>
                                     <a href="{{ route('blog.tags.edit', $tag->id) }}" class="btn btn-outline-primary">Edit</a>
-                                    <form action="{{ route('blog.tags.destroy', $tag->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('blog.tags.destroy', $tag->id) }}" method="POST" class="d-inline" id="delete-form-{{ $tag->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="confirmDelete({{ $tag->id }})">Delete</button>
                                     </form>
                                 </td>
                             </tr>

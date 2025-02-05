@@ -88,13 +88,11 @@
                                             <td>
                                                 <a href="{{ route('blog.authors.edit', $author->id) }}"
                                                     class="btn btn-outline-primary">Edit</a>
-                                                <form action="{{ route('blog.authors.destroy', $author->id) }}"
-                                                    method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger"
-                                                        onclick="return confirm('Are you sure?')">Delete</button>
-                                                </form>
+                                                    <form action="{{ route('blog.authors.destroy', $author->id) }}" method="POST" class="d-inline" id="delete-form-{{ $author->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-outline-danger" onclick="confirmDelete({{ $author->id }})">Delete</button>
+                                                    </form>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -109,39 +109,45 @@ class TransactionController extends Controller
 
 
     public function updateStatus(Request $request)
-    {
-        // Validate incoming request
-        $request->validate([
-            'order_id' => 'required|string',
-            'transaction_status' => 'required|string',
-        ]);
+{
+    // Validate incoming request
+    $request->validate([
+        'order_id' => 'required|string',
+        'transaction_status' => 'required|string',
+    ]);
 
-        // Retrieve the transaction based on the order_id
-        $transaction = Transaction::where('order_id', $request->order_id)->first();
+    // Retrieve the transaction based on the order_id
+    $transaction = Transaction::where('order_id', $request->order_id)->first();
 
-        if (!$transaction) {
-            return response()->json(['status' => 'error', 'message' => 'Transaction not found'], 404);
-        }
-
-        // Update the transaction status based on the Midtrans response
-        switch ($request->transaction_status) {
-            case 'settlement': // Payment successful
-                $transaction->update(['status' => 'approved']);
-                break;
-            case 'pending': // Payment pending
-                $transaction->update(['status' => 'pending']);
-                break;
-            case 'expire': // Payment expired
-            case 'cancel': // Payment canceled
-                $transaction->update(['status' => 'failed']);
-                break;
-            default:
-                return response()->json(['status' => 'error', 'message' => 'Invalid transaction status'], 400);
-        }
-
-        // Return success response
-        return response()->json(['status' => 'success', 'message' => 'Transaction status updated'], 200);
+    if (!$transaction) {
+        session()->flash('error', 'Transaksi tidak ditemukan.');
+        return response()->json(['status' => 'error', 'message' => 'Transaction not found'], 404);
     }
+
+    // Update the transaction status based on the Midtrans response
+    switch ($request->transaction_status) {
+        case 'settlement': // Payment successful
+            $transaction->update(['status' => 'approved']);
+            session()->flash('success', 'Pembayaran berhasil. Status transaksi telah diperbarui.');
+            break;
+        case 'pending': // Payment pending
+            $transaction->update(['status' => 'pending']);
+            session()->flash('info', 'Pembayaran masih pending.');
+            break;
+        case 'expire': // Payment expired
+        case 'cancel': // Payment canceled
+            $transaction->update(['status' => 'failed']);
+            session()->flash('error', 'Pembayaran gagal atau dibatalkan.');
+            break;
+        default:
+            session()->flash('error', 'Status transaksi tidak valid.');
+            return response()->json(['status' => 'error', 'message' => 'Invalid transaction status'], 400);
+    }
+
+    // Return success response
+    return response()->json(['status' => 'success', 'message' => 'Transaction status updated'], 200);
+}
+
 
     public function generateInvoice($transactionId)
     {

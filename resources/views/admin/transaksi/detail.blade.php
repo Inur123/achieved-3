@@ -8,54 +8,45 @@
 @endsection
 @section('content')
     {{-- Toast Notification --}}
-    <div id="toastContainer" style="position: fixed; top: 10px; right: 10px; z-index: 1050;">
-        @if ($errors->any())
-            <div class="toast align-items-center text-white bg-danger border-0 show" role="alert" aria-live="assertive"
-                aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        @foreach ($errors->all() as $error)
-                            <p>{{ $error }}</p>
-                        @endforeach
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
+    @if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+            confirmButtonColor: '#d33'
+        });
+    </script>
+@endif
 
-        @if (session('error'))
-            <div class="toast align-items-center text-white bg-danger border-0 show" role="alert" aria-live="assertive"
-                aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session('error') }}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: "{{ session('error') }}",
+            confirmButtonColor: '#d33'
+        });
+    </script>
+@endif
 
-        @if (session('success'))
-            <div class="toast align-items-center text-white bg-success border-0 show" role="alert" aria-live="assertive"
-                aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session('success') }}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
-    </div>
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#3085d6'
+        });
+    </script>
+@endif
+
 
     {{-- Content --}}
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <h4 class="mb-3">Daftar Transaksi</h4>
+                <h4 class="mb-3">Daftar Detail Transaksi</h4>
 
                 <div class="card">
                     <div class="card-body">
@@ -95,12 +86,11 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex">
-                                                    <form action="{{ route('admin.transaksi.destroy', $transaction->id) }}" method="POST" style="display:inline;">
+                                                    <form action="{{ route('admin.transaksi.destroy', $transaction->id) }}" method="POST" style="display:inline;" id="delete-form-{{ $transaction->id }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">Hapus</button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ $transaction->id }})">Hapus</button>
                                                     </form>
-
                                                     <a href="{{ route('admin.transaksi.show', $transaction->id) }}" class="btn btn-outline-info btn-sm">Detail</a>
                                                 </div>
                                             </td>

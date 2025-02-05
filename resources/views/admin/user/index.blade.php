@@ -64,11 +64,12 @@
                             <td>{{ $user->created_at->translatedFormat('l, d F Y | H.i.s') }}</td>
                             <td>
                                 <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-outline-warning">Edit</a>
-                                <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="d-inline">
+                                <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="d-inline" id="delete-form-{{ $user->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                    <button type="button" class="btn btn-outline-danger" onclick="confirmDelete({{ $user->id }})">Delete</button>
                                 </form>
+
                         </tr>
                     @endforeach
                 </tbody>
