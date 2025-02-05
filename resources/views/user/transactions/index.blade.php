@@ -64,21 +64,22 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Email</th>
-                            <th>Nomor Telepon</th>
+
                             <th>Produk</th>
                             <th>Harga</th>
                             <th>Tanggal Transaksi</th>
                             <th>Status</th>
                             <th>Bayar / Invoice</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($transactions as $transaction)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $transaction->name }}</td>
-                                <td>{{ $transaction->email }}</td>
-                                <td>{{ $transaction->phone_number }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+
                                 <td>{{ $transaction->product->name }}</td>
                                 <td>Rp {{ number_format($transaction->product->price, 0, ',', '.') }}</td>
                                 <td>{{ $transaction->created_at->format('d-m-Y H:i') }}</td> <!-- Tanggal transaksi -->
@@ -98,8 +99,15 @@
                                     @elseif ($transaction->status == 'paid' || $transaction->status == 'approved')
                                         <!-- Jika status approved, tampilkan tombol untuk download invoice -->
                                         <a href="{{ route('transactions.generateInvoice', ['transactionId' => $transaction->id]) }}" class="btn btn-info btn-sm">Download</a>
-
                                     @endif
+
+                                </td>
+                                <td>
+                                    <form action="{{ route('transactions.destroy', $transaction->id) }}" method="POST" class="d-inline" id="delete-form-{{ $transaction->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ $transaction->id }})">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

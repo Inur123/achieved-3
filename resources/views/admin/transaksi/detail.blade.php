@@ -58,7 +58,7 @@
                                         <th>No</th>
                                         <th>Nama </th>
                                         <th>Email </th>
-                                        <th>No Hp</th>
+
                                         <th>Nama Produk</th>
                                         <th>Tanggal Transaksi</th>
                                         <th>Status Pembayaran</th>
@@ -70,18 +70,18 @@
                                     @foreach ($transactions as $transaction)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $transaction->name }}</td>
-                                            <td>{{ $transaction->email }}</td>
-                                            <td>{{ $transaction->phone_number }}</td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+
                                             <td>{{ $transaction->product->name }}</td>
                                             <td>{{ $transaction->created_at->translatedFormat('l, d F Y | H.i.s') }}</td>
                                             <td>
                                                 @if ($transaction->status == 'pending')
                                                     <span class="badge bg-warning">Pending</span>
                                                 @elseif ($transaction->status == 'paid')
-                                                    <span class="badge bg-success">Paid</span>
+                                                    <span class="badge bg-info">Paid</span>
                                                 @else
-                                                    <span class="badge bg-info">Approve</span>
+                                                    <span class="badge bg-success">Approve</span>
                                                 @endif
                                             </td>
                                             <td>

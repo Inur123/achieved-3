@@ -47,9 +47,9 @@
     <h2>Checkout</h2>
     <p><strong>Produk:</strong> {{ $transaction->product->name }}</p>
     <p><strong>Harga:</strong> Rp {{ number_format($transaction->product->price, 0, ',', '.') }}</p>
-    <p><strong>Nama:</strong> {{ $transaction->name }}</p>
-    <p><strong>Email:</strong> {{ $transaction->email }}</p>
-    <p><strong>Nomor HP:</strong> {{ $transaction->phone_number }}</p>
+    <p><strong>Nama:</strong> {{ $user->name }}</p>
+    <p><strong>Email:</strong> {{ $user->email }}</p>
+
 
     <form action="{{ route('transactions.checkout', $transaction->id) }}" method="GET">
         @csrf

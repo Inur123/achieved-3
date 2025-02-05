@@ -50,12 +50,13 @@ class AdminTransaksiController extends Controller
     // TransactionController.php
     public function show($transactionId)
     {
-        // Mendapatkan detail transaksi berdasarkan ID
-        $transaction = Transaction::with('product')->findOrFail($transactionId);
+        // Mendapatkan detail transaksi berdasarkan ID, termasuk data produk
+        $transaction = Transaction::with('product', 'user')->findOrFail($transactionId);
 
-        // Menampilkan halaman detail transaksi
+        // Menampilkan halaman detail transaksi dan mengirim data transaksi serta user
         return view('admin.transaksi.show', compact('transaction'));
     }
+
 
     public function generateInvoice($transactionId)
     {

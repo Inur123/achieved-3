@@ -147,7 +147,7 @@
                             <span>
                                 <i class="ti ti-credit-card"></i> <!-- Icon for Transaction -->
                             </span>
-                            <span class="hide-menu">Buat Transaksi</span>
+                            <span class="hide-menu">Beli Product</span>
                         </a>
                     </li>
 

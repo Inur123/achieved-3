@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\ProductTransaction;
-
+use Illuminate\Support\Facades\Auth;
 use Midtrans\Snap;
 use Illuminate\Support\Facades\Log;
 
@@ -15,10 +15,14 @@ class TransactionController extends Controller
     public function index()
     {
         // Ambil transaksi berdasarkan user yang sedang login
-        $transactions = Transaction::where('user_id', auth()->id())->get();
+        $transactions = Transaction::where('user_id', Auth::id())->get();
 
-        return view('user.transactions.index', compact('transactions'));
+        // Ambil data user yang sedang login
+        $user = Auth::user();
+        // Kirim data transaksi dan user ke view
+        return view('user.transactions.index', compact('transactions', 'user'));
     }
+
 
     public function create()
     {
@@ -32,20 +36,14 @@ class TransactionController extends Controller
         // Validasi input dari form transaksi
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone_number' => 'required|string|max:15',
         ]);
         $product = Product::findOrFail($validated['product_id']);
         // Buat transaksi baru dengan status 'pending'
         $transaction = Transaction::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'product_id' => $validated['product_id'],
             'order_id' => 'TRX-' . time(),  // Generate order_id
             'snap_token' => null,
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'],
             'status' => 'pending',
             'price' => $product->price,
         ]);
@@ -62,11 +60,6 @@ class TransactionController extends Controller
             'transaction_details' => [
                 'order_id' => $transaction->order_id,
                 'gross_amount' => $transaction->product->price, // Sesuaikan dengan harga produk
-            ],
-            'customer_details' => [
-                'first_name' => $transaction->name,
-                'email' => $transaction->email,
-                'phone' => $transaction->phone_number,
             ],
         ];
 
@@ -100,9 +93,13 @@ class TransactionController extends Controller
             return redirect()->route('transactions.index')->with('error', 'Snap Token tidak ditemukan. Mohon coba lagi.');
         }
 
-        // Tampilkan halaman checkout dengan Snap Token
-        return view('user.transactions.checkout', compact('transaction', 'snapToken'));
+        // Ambil data user yang sedang login
+        $user = Auth::user();
+
+        // Tampilkan halaman checkout dengan Snap Token, dan data user
+        return view('user.transactions.checkout', compact('transaction', 'snapToken', 'user'));
     }
+
 
 
 
@@ -162,6 +159,20 @@ class TransactionController extends Controller
 
         // Return PDF untuk di-stream (open in browser, allow print/download)
         return $pdf->stream('invoice-' . $transaction->order_id . '.pdf');
+    }
+
+    //destroy
+    public function destroy(Transaction $transaction)
+    {
+        // Get the user_id from the transaction
+        $userId = $transaction->user_id;
+
+        // Menghapus transaksi
+        $transaction->delete();
+
+        // Mengarahkan kembali ke URL yang dituju setelah transaksi dihapus
+        return redirect("/user/transactions")
+            ->with('success', 'Transaksi berhasil dihapus.');
     }
 
 }

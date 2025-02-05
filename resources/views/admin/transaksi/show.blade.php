@@ -21,18 +21,17 @@
                     <div class="card-body">
                         <!-- Detail Transaksi -->
                         <h5>Invoice: #{{ $transaction->order_id}}</h5>
-                        <p><strong>Nama:</strong> {{ $transaction->name }}</p>
-                        <p><strong>Email:</strong> {{ $transaction->email }}</p>
-                        <p><strong>No HP:</strong> {{ $transaction->phone_number }}</p>
+                        <p><strong>Nama User:</strong> {{ $transaction->user->name }}</p>
+                        <p><strong>Email User:</strong> {{ $transaction->user->email }}</p>
                         <p><strong>Nama Produk:</strong> {{ $transaction->product->name }}</p>
                         <p><strong>Tanggal Transaksi:</strong> {{ $transaction->created_at->translatedFormat('l, d F Y | H.i.s') }}</p>
                         <p><strong>Status Pembayaran:</strong>
                             @if ($transaction->status == 'pending')
                                 <span class="badge bg-warning">Pending</span>
                             @elseif ($transaction->status == 'paid')
-                                <span class="badge bg-success">Paid</span>
+                                <span class="badge bg-info">Paid</span>
                             @else
-                                <span class="badge bg-info">Approve</span>
+                                <span class="badge bg-success">Approve</span>
                             @endif
                         </p>
                         <p><strong>Total:</strong> Rp {{ number_format($transaction->price, 0, ',', '.') }}</p>

@@ -85,9 +85,8 @@
         <!-- Transaction Details -->
         <div>
             <p><strong>Invoice: #{{ $transaction->order_id }}</strong></p>
-            <p><strong>Nama:</strong> {{ $transaction->name }}</p>
-            <p><strong>Email:</strong> {{ $transaction->email }}</p>
-            <p><strong>No HP:</strong> {{ $transaction->phone_number }}</p>
+            <p><strong>Nama User:</strong> {{ $transaction->user->name }}</p>
+            <p><strong>Email User:</strong> {{ $transaction->user->email }}</p>
             <p><strong>Nama Produk:</strong> {{ $transaction->product->name }}</p>
             <p><strong>Tanggal Transaksi:</strong> {{ $transaction->created_at->translatedFormat('l, d F Y | H.i.s') }}</p>
             <p><strong>Status Pembayaran:</strong>

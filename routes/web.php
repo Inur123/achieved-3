@@ -111,10 +111,8 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('transactions/checkout/{transactionId}', [TransactionController::class, 'checkout'])->name('transactions.checkout');
     Route::post('transactions/update-status', [TransactionController::class, 'updateStatus'])->name('transactions.update-status');
     Route::get('transactions/{transactionId}/invoice', [TransactionController::class, 'generateInvoice'])->name('transactions.generateInvoice');
-
-
-
-
+    //destroy
+    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 });
 
 //laravel-socialite
