@@ -11,7 +11,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'name', 'email', 'phone_number', 'payment_proof', 'status'
+        'user_id', 'product_id', 'name', 'email', 'phone_number', 'status','snap_token','order_id'
     ];
 
     public function product()

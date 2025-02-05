@@ -12,19 +12,38 @@
 
 @section('content')
     <div class="container-fluid">
-        <div id="toastContainer" style="position: fixed; top: 10px; right: 10px; z-index: 1050;">
-            @if (session('success'))
-                <div class="toast align-items-center text-white bg-success border-0 show" role="alert">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            {{ session('success') }}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                            data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
-        </div>
+        @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonColor: '#d33'
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#d33'
+            });
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#3085d6'
+            });
+        </script>
+    @endif
         <!-- Row 1: Total Post, Total Category, Total Author, Total Tags -->
         <div class="row">
             <h1 class="fs-7">Blog</h1>

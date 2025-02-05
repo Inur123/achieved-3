@@ -40,7 +40,8 @@
                             <th>Harga</th>
                             <th>Tanggal Transaksi</th>
                             <th>Status</th>
-                            <th>Bukti Pembayaran</th>
+                            <th>Bayar</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -62,7 +63,16 @@
                                         <span class="badge bg-info">Approve</span>
                                     @endif
                                 </td>
-                                <td><a href="{{ Storage::url($transaction->payment_proof) }}" target="_blank">Lihat Bukti</a></td>
+                                <td>
+                                    @if ($transaction->status == 'pending')
+                                        <!-- Tombol Bayar hanya muncul jika status pending -->
+                                        <a href="{{ route('transactions.checkout', ['transactionId' => $transaction->id]) }}" class="btn btn-primary btn-sm">Bayar</a>
+                                    @elseif ($transaction->status == 'paid' || $transaction->status == 'approved')
+                                        <!-- Status transaksi sudah dibayar -->
+                                        <span class="badge bg-success">Sudah Dibayar</span>
+                                    @endif
+                                </td>
+
 
 
 

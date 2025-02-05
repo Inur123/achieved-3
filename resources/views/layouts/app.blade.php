@@ -8,6 +8,7 @@
   <link rel="shortcut icon" type="image/png" href="{{ asset('template/assets/images/logos/logo-2.png') }}" />
   <link rel="stylesheet" href="{{ asset('template/assets/css/styles.min.css') }}" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     /* Loading screen styles */

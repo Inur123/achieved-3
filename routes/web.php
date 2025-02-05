@@ -87,6 +87,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('transaksi/{userId}/detail', [AdminTransaksiController::class, 'showDetail'])->name('admin.transaksi.detail');
     Route::delete('transaksi/{transaction}', [AdminTransaksiController::class, 'destroy'])->name('admin.transaksi.destroy');
 
+
+
     // User Routes
     Route::get('user/data', [UserController::class, 'index'])->name('admin.user.index');
     Route::get('user/data/create', [UserController::class, 'create'])->name('admin.user.create');
@@ -107,6 +109,10 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
     Route::post('transactions', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('transactions/checkout/{transactionId}', [TransactionController::class, 'checkout'])->name('transactions.checkout');
+    Route::post('midtrans/callback', [TransactionController::class, 'callback'])->name('midtrans.callback');
+
+
 });
 
 //laravel-socialite

@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->string('order_id')->unique();  // Tambahkan order_id unik untuk Midtrans
             $table->string('name');
             $table->string('email');
             $table->string('phone_number');
-            $table->string('payment_proof');
-            $table->enum('status', ['pending', 'paid', 'approved'])->default('pending');  // Menambahkan 'approved'
+            $table->enum('status', ['pending', 'paid', 'approved', 'failed'])->default('pending');
+            $table->string('snap_token')->nullable();  // Tambahkan status 'failed'
             $table->timestamps();
         });
+
     }
 
     /**

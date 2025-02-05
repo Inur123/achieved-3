@@ -53,17 +53,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <div class="mb-3">
-                        <label for="payment_proof" class="form-label">Bukti Pembayaran</label>
-                        <input type="file" name="payment_proof" id="payment_proof" class="form-control @error('payment_proof') is-invalid @enderror" accept="image/*">
-                        @error('payment_proof')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-
-                    <button type="submit" class="btn btn-primary">Buat Transaksi</button>
+                    <button type="submit" class="btn btn-primary">Beli Sekarang</button>
                 </form>
             </div>
         </div>
