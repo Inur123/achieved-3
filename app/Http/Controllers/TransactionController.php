@@ -120,41 +120,40 @@ class TransactionController extends Controller
 
 
 
-    public function callback(Request $request)
-{
-    $serverKey = config('midtrans.server_key');
-    $signatureKey = $request->input('signature_key');
-    $orderId = $request->input('order_id');
-    $transactionStatus = $request->input('transaction_status');
-    $statusCode = $request->input('status_code');
-    $grossAmount = $request->input('gross_amount');
 
-    // Generate expected signature
-    $expectedSignature = hash("sha512", $orderId . $statusCode . $grossAmount . $serverKey);
 
-    // Verify the signature
-    if ($signatureKey !== $expectedSignature) {
-        return response()->json(['message' => 'Invalid signature'], 403);
+    public function updateStatus(Request $request)
+    {
+        // Validate incoming request
+        $request->validate([
+            'order_id' => 'required|string',
+            'transaction_status' => 'required|string',
+        ]);
+
+        // Retrieve the transaction based on the order_id
+        $transaction = Transaction::where('order_id', $request->order_id)->first();
+
+        if (!$transaction) {
+            return response()->json(['status' => 'error', 'message' => 'Transaction not found'], 404);
+        }
+
+        // Update the transaction status based on the Midtrans response
+        switch ($request->transaction_status) {
+            case 'settlement': // Payment successful
+                $transaction->update(['status' => 'approved']);
+                break;
+            case 'pending': // Payment pending
+                $transaction->update(['status' => 'pending']);
+                break;
+            case 'expire': // Payment expired
+            case 'cancel': // Payment canceled
+                $transaction->update(['status' => 'failed']);
+                break;
+            default:
+                return response()->json(['status' => 'error', 'message' => 'Invalid transaction status'], 400);
+        }
+
+        // Return success response
+        return response()->json(['status' => 'success', 'message' => 'Transaction status updated'], 200);
     }
-
-    // Find the transaction in the database
-    $transaction = Transaction::where('order_id', $orderId)->first();
-
-    if (!$transaction) {
-        return response()->json(['message' => 'Transaction not found'], 404);
-    }
-
-    // Update the transaction status based on the payment status
-    if ($transactionStatus == 'settlement') {
-        $transaction->update(['status' => 'approved']);
-    } elseif ($transactionStatus == 'pending') {
-        $transaction->update(['status' => 'pending']);
-    } elseif ($transactionStatus == 'expire' || $transactionStatus == 'cancel') {
-        $transaction->update(['status' => 'failed']);
-    }
-
-    // Optionally, log the status or send additional data
-    return response()->json(['message' => 'Transaction status updated'], 200);
-}
-
 }

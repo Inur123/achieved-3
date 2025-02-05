@@ -26,20 +26,43 @@
 </div>
 
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
-    <script>
-        document.getElementById('pay-button').onclick = function() {
-            snap.pay("{{ $transaction->snap_token }}", {
-                onSuccess: function(result) {
-                    alert("Pembayaran sukses!");
-                    window.location.href = "{{ route('transactions.index') }}";
-                },
-                onPending: function(result) {
-                    alert("Menunggu pembayaran...");
-                },
-                onError: function(result) {
+<script>
+    document.getElementById('pay-button').onclick = function() {
+        snap.pay("{{ $transaction->snap_token }}", {
+            onSuccess: function(result) {
+                // After success, call the backend to update the status
+                fetch("{{ route('transactions.update-status') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        order_id: result.order_id,
+                        transaction_status: result.transaction_status,
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert("Pembayaran sukses!");
+                        window.location.href = "{{ route('transactions.index') }}";
+                    } else {
+                        alert("Terjadi kesalahan saat memperbarui status transaksi.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     alert("Pembayaran gagal!");
-                }
-            });
-        };
-    </script>
+                });
+            },
+            onPending: function(result) {
+                alert("Menunggu pembayaran...");
+            },
+            onError: function(result) {
+                alert("Pembayaran gagal!");
+            }
+        });
+    };
+</script>
 @endsection

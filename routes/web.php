@@ -110,7 +110,7 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('transactions', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('transactions/checkout/{transactionId}', [TransactionController::class, 'checkout'])->name('transactions.checkout');
-    Route::post('midtrans/callback', [TransactionController::class, 'callback'])->name('midtrans.callback');
+    Route::post('transactions/update-status', [TransactionController::class, 'updateStatus'])->name('transactions.update-status');
 
 
 });
