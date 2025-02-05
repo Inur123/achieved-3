@@ -61,6 +61,19 @@ class TransactionController extends Controller
                 'order_id' => $transaction->order_id,
                 'gross_amount' => $transaction->product->price, // Sesuaikan dengan harga produk
             ],
+            'customer_details' => [
+                'first_name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+            ],
+            'item_details' => [
+                [
+                    'id' => $transaction->product->id,
+                    'price' => $transaction->product->price,
+                    'quantity' => 1,
+                    'name' => $transaction->product->name,
+                ]
+            ],
+
         ];
 
         // Generate Snap Token
