@@ -12,6 +12,7 @@
 
 @section('content')
     <div class="container-fluid">
+
         @if ($errors->any())
         <script>
             Swal.fire({
@@ -47,8 +48,9 @@
 
         <!-- Row 1 -->
         <div class="row">
-            <!-- Total Transactions Card -->
-            <h1>Welcome, {{ Auth::user()->name }}!</h1>
+
+            <h1 class="mb-3">Welcome, <span class="text-primary">{{ ucwords(strtolower(Auth::user()->name)) }}!</span></h1>
+
             <div class="col-md-4">
                 <a href="{{ route('transactions.index') }}" class="card shadow-sm text-decoration-none">
                     <div class="card-body">

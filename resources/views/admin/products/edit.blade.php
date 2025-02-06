@@ -47,7 +47,7 @@
                     <option value="0" {{ $product->status == 0 ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
-            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">Back</a>
+            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary me-2">Back</a>
             <button type="submit" class="btn btn-outline-success">Save Changes</button>
         </form>
     </div>

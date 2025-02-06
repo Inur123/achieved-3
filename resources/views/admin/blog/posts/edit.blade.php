@@ -72,18 +72,31 @@
                                 <label for="content" class="form-label">Content</label>
                                 <textarea class="form-control" id="content" name="content" rows="5" required>{{ old('content', $post->content) }}</textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="excerpt" class="form-label">Excerpt</label>
+                                <textarea class="form-control" id="excerpt" name="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
+                            </div>
                         </div>
 
                         {{-- Right Column --}}
                         <div class="col-md-6">
                             {{-- Excerpt --}}
-                            <div class="mb-3">
-                                <label for="excerpt" class="form-label">Excerpt</label>
-                                <textarea class="form-control" id="excerpt" name="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
-                            </div>
 
+
+
+
+                            {{-- Thumbnail --}}
+                            <div class="mb-3">
+                                <label for="thumbnail" class="form-label">Thumbnail</label>
+                                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+                                @if ($post->thumbnail)
+                                    <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="Current Thumbnail"
+                                        class="mt-2" width="100">
+                                @endif
+                            </div>
                             {{-- Tags --}}
                             <div class="mb-3">
+                                <label for="tags" class="form-label">Tags</label>
                                 <select data-placeholder="Choose tags..." multiple class="chosen-select" name="test[]">
                                     <option value=""></option>
                                     @foreach ($tags as $tag)
@@ -94,33 +107,31 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            {{-- Thumbnail --}}
-                            <div class="mb-3">
-                                <label for="thumbnail" class="form-label">Thumbnail</label>
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
-                                @if ($post->thumbnail)
-                                    <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="Current Thumbnail" class="mt-2" width="100">
-                                @endif
-                            </div>
-
                             {{-- Publish Status --}}
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1"
-                                       {{ old('is_published', $post->is_published) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="is_published">Publish</label>
+                            <div class="mb-3">
+                                <label for="is_published" class="form-label">Publish Status</label>
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1"
+                                           {{ old('is_published', $post->is_published) ? 'checked' : '' }} onchange="toggleLabel()">
+                                    <label class="form-check-label" for="is_published" id="publishLabel">
+                                        {{ old('is_published', $post->is_published) ? 'Ya' : 'Tidak' }}
+                                    </label>
+                                </div>
                             </div>
+
+
 
 
                             {{-- Published Date --}}
                             <div class="mb-3">
-                                <label for="published_at" class="form-label">Published At</label>
+                                <label for="published_at" class="form-label">Tanggal Publish</label>
                                 <input type="datetime-local" class="form-control" id="published_at" name="published_at"
                                     value="{{ old('published_at', $post->published_at ? \Carbon\Carbon::parse($post->published_at)->format('Y-m-d\TH:i') : '') }}">
                             </div>
 
                             {{-- Submit Button --}}
-                            <button type="submit" class="btn btn-outline-primary">Update Post</button>
+                            <a href="{{ route('blog.posts.index') }}" class="btn btn-outline-secondary me-2">Batal</a>
+                            <button type="submit" class="btn btn-outline-primary ">Update Post</button>
                         </div>
                     </div>
                 </form>
@@ -129,9 +140,15 @@
     </div>
     <script>
         $(".chosen-select").chosen({
-             width: "95%",
+            width: "95%",
             no_results_text: "Oops, nothing found!"
         })
     </script>
-
+<script>
+    function toggleLabel() {
+        let checkbox = document.getElementById('is_published');
+        let label = document.getElementById('publishLabel');
+        label.textContent = checkbox.checked ? 'Ya' : 'Tidak';
+    }
+</script>
 @endsection

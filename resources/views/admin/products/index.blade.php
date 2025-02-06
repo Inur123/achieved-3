@@ -47,11 +47,12 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $product->name }}</td>
-                                <td>{{ $product->description }}</td>
+                                <td>{{ \Illuminate\Support\Str::limit($product->description, 50) }}</td>
+
                                 <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                                 <td>
                                     @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" style="width: 100px; alt="Product Image">
+                                    <img src="{{ asset('storage/' . $product->image) }}" style="width: 50px; alt="Product Image">
                                     @else
                                         No Image
                                     @endif
@@ -61,8 +62,8 @@
                                         {{ $product->status == 1 ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                <td>
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-primary">Edit</a>
+                                <td class="d-flex justify-content-start ">
+                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-primary me-2">Edit</a>
                                     <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" id="delete-form-{{ $product->id }}">
                                         @csrf
                                         @method('DELETE')

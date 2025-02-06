@@ -63,7 +63,7 @@
                         <label for="name" class="form-label">Name</label>
                         <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required>
                     </div>
-                    <a href="{{ route('blog.tags.index') }}" class="btn btn-outline-secondary">Back</a>
+                    <a href="{{ route('blog.tags.index') }}" class="btn btn-outline-secondary me-2">Back</a>
                     <button type="submit" class="btn btn-outline-success">Create Tag</button>
                 </form>
             </div>

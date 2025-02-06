@@ -63,7 +63,7 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->created_at->translatedFormat('l, d F Y | H.i.s') }}</td>
                             <td>
-                                <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-outline-warning">Edit</a>
+                                <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-outline-warning me-2">Edit</a>
                                 <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="d-inline" id="delete-form-{{ $user->id }}">
                                     @csrf
                                     @method('DELETE')

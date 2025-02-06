@@ -81,6 +81,7 @@
                                 <textarea class="form-control" id="excerpt" name="excerpt" rows="3">{{ old('excerpt') }}</textarea>
                             </div>
                             <div class="mb-3">
+                                <label for="tags" class="form-label">Tags</label>
                                 <select data-placeholder="Pilih tag..." multiple class="chosen-select" name="test[]">
                                     <option value=""></option>
                                     @foreach ($tags as $tag)
@@ -100,13 +101,16 @@
                             </div>
 
                             {{-- Publish Status --}}
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1"
-                                       {{ old('is_published') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="is_published">Publish</label>
+                            <div class="mb-3">
+                                <label for="is_published" class="form-label">Publish Status</label>
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1"
+                                           {{ old('is_published') ? 'checked' : '' }} onchange="toggleLabel()">
+                                    <label class="form-check-label" for="is_published" id="publishLabel">
+                                        {{ old('is_published') ? 'Ya' : 'Tidak' }}
+                                    </label>
+                                </div>
                             </div>
-
-
                             {{-- Published Date --}}
                             <div class="mb-3">
                                 <label for="published_at" class="form-label">Published At</label>
@@ -115,7 +119,7 @@
                             </div>
 
                             {{-- Submit Button --}}
-                            <a href="{{ route('blog.posts.index') }}" class="btn btn-outline-secondary">Back</a>
+                            <a href="{{ route('blog.posts.index') }}" class="btn btn-outline-secondary me-2">Back</a>
                             <button type="submit" class="btn btn-outline-primary">Create Post</button>
                         </div>
                     </div>
@@ -130,5 +134,11 @@
             no_results_text: "Oops, nothing found!"
         })
     </script>
-
+<script>
+    function toggleLabel() {
+        let checkbox = document.getElementById('is_published');
+        let label = document.getElementById('publishLabel');
+        label.textContent = checkbox.checked ? 'Ya' : 'Tidak';
+    }
+</script>
 @endsection

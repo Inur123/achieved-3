@@ -87,7 +87,7 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('blog.authors.edit', $author->id) }}"
-                                                    class="btn btn-outline-primary">Edit</a>
+                                                    class="btn btn-outline-primary me-2">Edit</a>
                                                     <form action="{{ route('blog.authors.destroy', $author->id) }}" method="POST" class="d-inline" id="delete-form-{{ $author->id }}">
                                                         @csrf
                                                         @method('DELETE')

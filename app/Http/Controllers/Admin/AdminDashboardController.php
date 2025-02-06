@@ -11,21 +11,25 @@ use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
     public function index()
     {
         // Count of posts, categories, authors, tags
-        $totalPosts = Post::where('is_published', true)->count();
+        $totalPosts = Post::count();
         $totalCategories = Category::count();
         $totalAuthors = Author::count();
         $totalTags = Tag::count();
         $totalProducts = Product::count();
+        $totalUsers = User::where('role_id', 2)->count();
         // $totalPurchasedProducts = Product::has('transactions')->count();
 
         // Get the total transactions
         $totalTransactions = Transaction::count();
+
+        $user = Auth::user();
 
         // Fetch all transactions and their associated products
         $transactions = Transaction::with('product')->get();
@@ -41,9 +45,10 @@ class AdminDashboardController extends Controller
             'totalAuthors',
             'totalTags',
             'totalProducts',
-
+            'totalUsers',
             'totalTransactions',
-            'totalPayments'
+            'totalPayments',
+            'user'
 
         ));
     }

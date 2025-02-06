@@ -96,7 +96,7 @@
                             </td>
                             <td>{{ $post->is_published ? 'Yes' : 'No' }}</td>
                             <td>
-                                <a href="{{ route('blog.posts.edit', $post->id) }}" class="btn btn-outline-warning btn-sm">Edit</a>
+                                <a href="{{ route('blog.posts.edit', $post->id) }}" class="btn btn-outline-warning btn-sm me-2">Edit</a>
 
                                 <form action="{{ route('blog.posts.destroy', $post->id) }}" method="POST" class="d-inline" id="delete-form-{{ $post->id }}">
                                     @csrf

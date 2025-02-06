@@ -46,7 +46,7 @@
                 @enderror
             </div>
 
-            <a href="{{ route('admin.user.index') }}" class="btn btn-outline-secondary">Cancel</a>
+            <a href="{{ route('admin.user.index') }}" class="btn btn-outline-secondary me-2">Cancel</a>
             <button type="submit" class="btn btn-outline-primary">Create User</button>
         </form>
     </div>

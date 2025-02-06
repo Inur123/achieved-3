@@ -21,6 +21,6 @@ class UserDashboardController extends Controller
             return $carry + ($transaction->product ? $transaction->product->price : 0);
         }, 0);
 
-        return view('user.dashboard', compact('transactions', 'totalTransactions', 'totalPayments'));
+        return view('user.dashboard', compact('transactions', 'totalTransactions', 'totalPayments',));
     }
 }

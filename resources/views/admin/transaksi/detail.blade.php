@@ -46,7 +46,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <h4 class="mb-3">Daftar Detail Transaksi</h4>
+                <h4 class="mb-3">Daftar Detail Transaksi, <span class="text-primary">{{ ucfirst($user->name) }}</span></h4>
+
+
 
                 <div class="card">
                     <div class="card-body">
@@ -56,9 +58,6 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama </th>
-                                        <th>Email </th>
-
                                         <th>Nama Produk</th>
                                         <th>Tanggal Transaksi</th>
                                         <th>Status Pembayaran</th>
@@ -70,8 +69,7 @@
                                     @foreach ($transactions as $transaction)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
+
 
                                             <td>{{ $transaction->product->name }}</td>
                                             <td>{{ $transaction->created_at->translatedFormat('l, d F Y | H.i.s') }}</td>
@@ -89,7 +87,7 @@
                                                     <form action="{{ route('admin.transaksi.destroy', $transaction->id) }}" method="POST" style="display:inline;" id="delete-form-{{ $transaction->id }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmDelete({{ $transaction->id }})">Hapus</button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm me-2" onclick="confirmDelete({{ $transaction->id }})">Hapus</button>
                                                     </form>
                                                     <a href="{{ route('admin.transaksi.show', $transaction->id) }}" class="btn btn-outline-info btn-sm">Detail</a>
                                                 </div>

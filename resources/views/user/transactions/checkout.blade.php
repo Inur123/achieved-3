@@ -45,6 +45,7 @@
         </script>
     @endif
     <h2>Checkout</h2>
+
     <p><strong>Produk:</strong> {{ $transaction->product->name }}</p>
     <p><strong>Harga:</strong> Rp {{ number_format($transaction->product->price, 0, ',', '.') }}</p>
     <p><strong>Nama:</strong> {{ $user->name }}</p>
@@ -53,8 +54,8 @@
 
     <form action="{{ route('transactions.checkout', $transaction->id) }}" method="GET">
         @csrf
-        <button type="button" id="pay-button" class="btn btn-primary">Bayar Sekarang</button>
-        <a href="{{ route('transactions.index') }}" class="btn btn-secondary">Bayar Nanti</a>
+        <button type="button" id="pay-button" class="btn btn-outline-primary me-2">Bayar Sekarang</button>
+        <a href="{{ route('transactions.index') }}" class="btn btn-outline-secondary">Bayar Nanti</a>
     </form>
 </div>
 

@@ -27,6 +27,11 @@ Route::post('login', [AuthController::class, 'login'])->name('login.submit');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth')->get('/profile', [AuthController::class, 'showProfile'])->name('profile');
+Route::middleware('auth')->put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+
+
+
 //auth
 Route::middleware('auth')->group(function () {
     // User Dashboard Route

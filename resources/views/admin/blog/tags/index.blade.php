@@ -74,7 +74,7 @@
                                 <td>{{ $tag->name }}</td>
                                 <td>{{ $tag->slug }}</td>
                                 <td>
-                                    <a href="{{ route('blog.tags.edit', $tag->id) }}" class="btn btn-outline-primary">Edit</a>
+                                    <a href="{{ route('blog.tags.edit', $tag->id) }}" class="btn btn-outline-primary me-2">Edit</a>
                                     <form action="{{ route('blog.tags.destroy', $tag->id) }}" method="POST" class="d-inline" id="delete-form-{{ $tag->id }}">
                                         @csrf
                                         @method('DELETE')

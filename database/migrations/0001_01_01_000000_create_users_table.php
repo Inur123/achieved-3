@@ -30,7 +30,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('role_id')->constrained('roles')->default(2); // Reference to the 'roles' table with a default role 'user'
+            $table->foreignId('role_id')->constrained('roles')->default(2);
+            $table->string('avatar')->nullable(); // Reference to the 'roles' table with a default role 'user'
             $table->rememberToken();
             $table->timestamps();
         });

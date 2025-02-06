@@ -74,7 +74,7 @@
                                 <td>{{ $category->name }}</td>
                                 <td>{{ $category->slug }}</td>
                                 <td>
-                                    <a href="{{ route('blog.categories.edit', $category->id) }}" class="btn btn-outline-primary">Edit</a>
+                                    <a href="{{ route('blog.categories.edit', $category->id) }}" class="btn btn-outline-primary me-2">Edit</a>
                                     <form action="{{ route('blog.categories.destroy', $category->id) }}" method="POST" class="d-inline" id="delete-form-{{ $category->id }}">
                                         @csrf
                                         @method('DELETE')

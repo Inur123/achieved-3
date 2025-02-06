@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -56,44 +57,90 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email',
-        'password' => 'required|string|min:8',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+        ]);
 
-    if ($validator->fails()) {
-        return redirect()->back()->withErrors($validator)->withInput();
-    }
-
-    $credentials = $request->only('email', 'password');
-
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user();
-
-        // Set alert message
-        session()->flash('success', 'Login berhasil!');
-
-        // Check role_id (1 for admin, 2 for user)
-        if ($user->role_id == 1) {
-            return redirect()->route('admin.dashboard');
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Default to user dashboard
-        return redirect()->route('user.dashboard');
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            // Set alert message
+            session()->flash('success', 'Login berhasil!');
+
+            // Check role_id (1 for admin, 2 for user)
+            if ($user->role_id == 1) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            // Default to user dashboard
+            return redirect()->route('user.dashboard');
+        }
+
+        // Custom error messages based on the failed login attempt
+        if (!User::where('email', $request->email)->exists()) {
+            return back()->with('error', 'Email tidak ditemukan.');
+        } elseif (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return back()->with('error', 'Password salah.');
+        }
+
+        return back()->with('error', 'Invalid credentials');
     }
 
-    // Custom error messages based on the failed login attempt
-    if (!User::where('email', $request->email)->exists()) {
-        return back()->with('error', 'Email tidak ditemukan.');
-    } elseif (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        return back()->with('error', 'Password salah.');
+    public function showProfile()
+    {
+        // Retrieve the currently authenticated user
+        $user = Auth::user();
+
+        // Pass the user data to the profile view
+        return view('auth.profile', compact('user'));
     }
 
-    return back()->with('error', 'Invalid credentials');
-}
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
 
+        // Validate the input data (exclude 'role' from validation if not an admin)
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Add validation for avatar
+        ]);
 
+        // Only allow admins to change the role
+        if ($user->role_id == 1) {  // Check if the logged-in user is an admin
+            $validatedData['role'] = $request->input('role');  // Allow role update
+        } else {
+            // Remove 'role' field from the validated data if the user is not an admin
+            unset($validatedData['role']);
+        }
 
+        // Handle avatar upload if it exists in the request
+        if ($request->hasFile('avatar')) {
+            // Generate a unique name for the avatar and store it in the 'avatars' folder
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+            // Add the avatar path to the validated data
+            $validatedData['avatar'] = $avatarPath;
+
+            // Optionally, delete the old avatar if it exists
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+        }
+
+        // Update the user's profile
+        $user->update($validatedData);
+
+        // Redirect back with success message
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+    }
 
 }
